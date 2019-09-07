@@ -13,7 +13,13 @@
 	
 	<style>
 	body {
-	  background-color: #aaaaff;
+	  background-color: #8a0303;
+	}
+	
+	.center-block {
+	   margin-left:auto;
+	   margin-right:auto;
+	   display:block;
 	}
 	</style>
   </head>
@@ -21,7 +27,7 @@
 	<div class="container" style="margin-top:80px">
 		<div class="row">
 			<div class="col-md-1 col-sm-2">
-				<p class="font-weight-bold w-100">NOME</p>
+				<p class="font-weight-bold w-100 text-white">NOME</p>
 			</div>
 			<div class="col-sm">
 				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
@@ -29,7 +35,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-1 col-sm-2">
-				<p class="font-weight-bold w-100">DOVE</p>
+				<p class="font-weight-bold w-100 text-white">DOVE</p>
 			</div>
 			<div class="col-sm">
 				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
@@ -37,7 +43,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-1 col-sm-2">
-				<p class="font-weight-bold w-100">TAGS</p>
+				<p class="font-weight-bold w-100 text-white">TAGS</p>
 			</div>
 			<div class="col-sm">
 				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
@@ -45,7 +51,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-1 col-sm-2">
-				<p class="font-weight-bold w-100">DATA</p>
+				<p class="font-weight-bold w-100 text-white">DATA</p>
 			</div>
 			<div class="col-sm">
 				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
@@ -53,7 +59,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-1 col-sm-2">
-				<p class="font-weight-bold w-100">ORA</p>
+				<p class="font-weight-bold w-100 text-white">ORA</p>
 			</div>
 			<div class="col-sm">
 				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
@@ -61,40 +67,76 @@
 		</div>
 		<div class="row">
 			<div class="col-sm">
-				<button onclick="search()" class="font-weight-bold btn d-none d-inline-block btn-block" style="margin-top:20px">CERCA</button>
+				<button onclick="search()" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">CERCA</button>
 			</div>
 		</div>
 	</div>
 	
 	<div class="container" style="margin-top:80px">
-		<div class="row">
-			<div class="col-sm">
-				<div class="card" style="width: 18rem;">
-				<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
-				</div>
+		<div class="row text-center">
+			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
+				<div class="card center-block" style="width: 18rem;">
+					<img src="https://media.giphy.com/media/9kDR0U4gaguic/giphy.gif" class="card-img-top" alt="...">
+					<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
+					</div>
 				</div>
 			</div>
 
-			<div class="col-sm">
-				<div class="card" style="width: 18rem;">
-				<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
-				</div>
+			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
+				<div class="card center-block" style="width: 18rem;">
+					<img src="https://media.giphy.com/media/I2sZ6qckkhfLG/giphy.gif" class="card-img-top" alt="...">
+					<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
+					</div>
 				</div>
 			</div>
 			
-			<div class="col-sm">
-				<div class="card" style="width: 18rem;">
-				<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
+			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
+				<div class="card center-block" style="width: 18rem;">
+					<img src="https://media.giphy.com/media/mErRqp3dOxMeA/giphy.gif" class="card-img-top" alt="...">
+					<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
+					</div>
 				</div>
+			</div>
+			
+			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
+				<div class="card center-block" style="width: 18rem;">
+					<img src="https://media.giphy.com/media/ItLceamnRtfUI/giphy.gif" class="card-img-top" alt="...">
+					<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
+				<div class="card center-block" style="width: 18rem;">
+					<img src="https://media.giphy.com/media/Dbf7V57cxcwBq/giphy.gif" class="card-img-top" alt="...">
+					<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
+				<div class="card center-block" style="width: 18rem;">
+					<img src="https://media.giphy.com/media/nvTB2zcQ0oMkE/giphy.gif" class="card-img-top" alt="...">
+					<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
+					</div>
 				</div>
 			</div>
 		</div>
