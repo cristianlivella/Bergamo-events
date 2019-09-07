@@ -1,0 +1,71 @@
+<html>
+
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=lFzRHQ6O"></script>
+
+
+<script>
+
+	function start(){
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var response = JSON.parse(this.responseText);
+                            DBresult(response);
+                        }
+                    };
+
+
+		var data ;
+                    
+        xhttp.open("POST", "http://99.80.72.24/read.php", true);
+        xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhttp.send(data);
+
+        
+                    
+	}
+
+	function DBresult(datdb){
+		
+		var i;
+
+		var l = datdb.length;
+
+		var eventi = new Array();
+		var ora = new Array();
+		var giorno = new Array();
+		
+		var msgOre;
+		var msgGiorni;
+		var msgEventi;
+
+		console.log(datdb);
+
+		for (i=0; i<l; i++){
+			eventi[i]=datdb[i]['title'];
+			ora[i]=datdb[i]['start_time']+'/'+datdb[i]['end_time'];
+			giorno[i]=datdb[i]['date'];
+		}
+
+		msgEventi = eventi[1] + ", ";
+
+		for(i=1;i<5 && i<l;i++){
+			msgEventi = msgEventi + eventi[i] +", "; 
+		}
+		msgEventi= " il gli eventi consigliati sono:" + msgEventi;
+		console.log(msgEventi);
+		console.log(ora);
+		tts(msgEventi);
+
+	}
+
+	function tts(msg){
+		responsiveVoice.speak(msg, 'Italian Female');
+		console.log(msg);
+	}
+</script>
+
+<body>
+<button onclick="start();" type="button" value="Play">Play</button>
+</body>
+</html>
