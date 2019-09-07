@@ -6,6 +6,7 @@ $categories_english = array();
 $categories_italian = array();
 
 $token = "YOUR_TOKEN";
+include("config.php");
 // get your token here: https://www.eventbrite.com/platform/api-keys
 
 $json = file_get_contents("https://www.eventbriteapi.com/v3/events/search/?q=Bergamo&expand=venue,category&token=".$token);
