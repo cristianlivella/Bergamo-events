@@ -1,16 +1,19 @@
 <!doctype html>
 <html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 <script>
 	var page=0;
 	var datdb;
 	var datdbok;
 	var j=0;
+	var currentNumberOfCards = 0;
 
 	function iniz(){
+		ChangeStyle("psychedelic");
+		
 		document.getElementById("nxtb").style.display = "none";
 		document.getElementById("prvb").style.display = "none";
-
-		ChangeStyle("psychedelic");
 	}
 
 	function nextPage(){
@@ -27,23 +30,30 @@
 
 	function loadButton(){
 		document.getElementById("prvb").style.display = "block";
-		document.getElementById("nxtb").style.display = "none";
 		if(page==0){
 			document.getElementById("prvb").style.display = "none";
 		}
-		if(page+1<=datdbok.length/9){
-			console.log('dentro');
-			document.getElementById("nxtb").style.display = "block";
+		
+		if(datdbok!=undefined){
+			if(currentNumberOfCards < 9 || (datdbok.length%9==0 && (page+1)*9 == datbok.length)){
+			//if(){
+				console.log('dentro');
+				document.getElementById("nxtb").style.display = "none";
+			}else{
+				document.getElementById("nxtb").style.display = "block";
+			}
 		}
 	}
 
 	function fillCards(){
 		var cards = "";
 		var l = datdbok.length;
-
+		
 		loadButton();
 		console.log("ok "+page);
-
+		
+		currentNumberOfCards = 0;
+		
 		for(var i=page*9; i<j && i<page*9+9;i++){
 			//non toccare
 			console.log(i);
@@ -69,8 +79,10 @@
 			card += '</div>';
 			
 			cards += card;
+			currentNumberOfCards++;
+			console.log(currentNumberOfCards);
 		}
-		if(page+1>datdbok.length/9){
+		/*if(page+1>datdbok.length/9){
 			for(i=0;i<9-(l%9);i++){
 				var card = "";
 				card += '<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="visibility:hidden; margin-bottom:10px">';
@@ -86,11 +98,20 @@
 				
 				cards += card;
 			}
-		}
+		}*/
 		document.getElementById("cards").innerHTML = cards;
+		loadButton();
 	}
+	
+	$("input").keypress(function(event) { 
+            if (event.keyCode === 13) { 
+                start();
+            } 
+        }); 
 
 	function start(){
+		page = 0;
+	
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function () {
 			if (this.readyState == 4 && this.status == 200) {
@@ -108,10 +129,9 @@
         xhttp.send(data);      
 	}
 
-
-
 	function DBresult(){
 		var i;
+		j = 0;
 		
 		var l = datdb.length;
 
@@ -205,29 +225,42 @@
 		var background = "";
 		var text = "";
 		var button = "";
+		var nextprevbts = "";
 		if(type == "light"){
 			background = "background-color: #ffffff; background-image:url()";
 			text = "color: #343A40;";
 			button = '<button onclick="start();" class="font-weight-bold btn btn-outline-dark btn-block" style="margin-top:20px">CERCA</button>'
+			nextprevbts ='<div class="col-sm-6"> <button id="prvb" onclick="prevPage();" class="font-weight-bold btn btn-outline-dark btn-block" style="margin-top:20px">pagina precedente</button></div>'
+						+'<div class="col-sm-6"> <button id="nxtb" onclick="nextPage();" class="font-weight-bold btn btn-outline-dark btn-block" style="margin-top:20px">pagina successiva</button></div>';
 		}else if(type == "dark"){
 			background = "background-color: #343A40; background-image:url()";
 			text = "color: #ffffff;";
 			button = '<button onclick="start();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">CERCA</button>'
+			nextprevbts ='<div class="col-sm-6"> <button id="prvb" onclick="prevPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina precedente</button></div>'
+						+'<div class="col-sm-6"> <button id="nxtb" onclick="nextPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina successiva</button></div>';
 		}else if(type == "red"){
 			background = "background-color: #8a0303; background-image:url()";
 			text = "color: #ffffff;";
 			button = '<button onclick="start();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">CERCA</button>'
+			nextprevbts ='<div class="col-sm-6"> <button id="prvb" onclick="prevPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina precedente</button></div>'
+						+'<div class="col-sm-6"> <button id="nxtb" onclick="nextPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina successiva</button></div>';
 		}else if(type == "psychedelic"){
 			background = 'background-image: url("https://media.giphy.com/media/ItLceamnRtfUI/giphy.gif");';
 			text = "color: #ffffff;";
-			button = '<button onclick="start();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">CERCA</button>'
+			button = '<button onclick="start();" class="font-weight-bold btn btn-light btn-block" style="margin-top:20px">CERCA</button>'
+			nextprevbts ='<div class="col-sm-6"> <button id="prvb" onclick="prevPage();" class="font-weight-bold btn btn-light btn-block" style="margin-top:20px">pagina precedente</button></div>'
+						+'<div class="col-sm-6"> <button id="nxtb" onclick="nextPage();" class="font-weight-bold btn btn-light btn-block" style="margin-top:20px">pagina successiva</button></div>';
 		}else if(type == "matrix"){
 			background = 'background-image: url("https://media.giphy.com/media/4heseFMvObk9q/giphy.gif");';
 			text = "color: #ffffff;";
 			button = '<button onclick="start();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">CERCA</button>'
+			nextprevbts ='<div class="col-sm-6"> <button id="prvb" onclick="prevPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina precedente</button></div>'
+						+'<div class="col-sm-6"> <button id="nxtb" onclick="nextPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina successiva</button></div>';
 		}
 		
 		document.getElementById("btnDiv").innerHTML = button;
+		document.getElementById("nextprevbts").innerHTML = nextprevbts;
+		loadButton();
 		
 		var sheet = document.createElement('style')
 		sheet.innerHTML = "body { " + background + " } \n .text-change{ " + text + " }";
@@ -275,7 +308,7 @@
 					<p class="font-weight-bold w-100 text-change">NOME</p>
 				</div>
 				<div class="col-sm">
-					<textarea id="name" rows="1" class="form-control ds-input"></textarea>
+					<input type="text" id="name" rows="1" class="form-control ds-input"></input>
 				</div>
 			</div>
 			<div class="row">
@@ -324,7 +357,7 @@
 		</div>
 
 		<div class="container">
-		  <div class="row" >
+		  <div class="row" id="nextprevbts">
 			<div  class="col-sm-6"> <button id="prvb" onclick="prevPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina precedente</button></div>
 			<div  class="col-sm-6"> <button id="nxtb" onclick="nextPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina successiva</button></div>
 		  </div>
