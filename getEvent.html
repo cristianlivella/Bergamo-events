@@ -1,7 +1,221 @@
 <!doctype html>
 <html lang="en">
-</style>
-  <head>
+<script>
+		var page=0;
+		var datdb;
+		var datdbok;
+		var j=0;
+
+		function iniz(){
+			document.getElementById("nxtb").style.display = "none";
+			document.getElementById("prvb").style.display = "none";
+
+		}
+
+		function nextPage(){
+			
+			page++;
+			
+			
+
+			fillCards();
+
+		}
+
+		function prevPage(){
+			
+			page--;
+			
+
+			fillCards();
+
+		}
+
+		function loadButton(){
+			document.getElementById("prvb").style.display = "block";
+			document.getElementById("nxtb").style.display = "none";
+			if(page==0){
+				document.getElementById("prvb").style.display = "none";
+			}
+			if(page+1<=datdbok.length/9){
+				console.log('dentro');
+				document.getElementById("nxtb").style.display = "block";
+			}
+		}
+
+		function fillCards(){
+
+
+			
+			var cards = "";
+			var l = datdbok.length;
+
+			loadButton();
+			console.log("ok "+page);
+
+			for(var i=page*9; i<j && i<page*9+9;i++){
+				//non toccare
+				console.log(i);
+				console.log(datdbok[i]);
+				var title = datdbok[i]['title'];
+				var description = datdbok[i]['description'];
+				var address = datdbok[i]['place'];
+				
+				//non toccare
+				var iframe = '<iframe class="card-img-top" frameborder="0" src="https://maps.google.com/maps?f=q&source=s_q&hl=it&geocode=&q='
+				iframe +=  address.replace(",", "").replace(" ", "+") + '&z=14&output=embed"></iframe>'
+				
+				var card = "";
+				card += '<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">';
+				card += '	<div class="card center-block" style="width: 18rem;">';
+				card += iframe;
+				card += '		<div class="card-body">';
+				card += '			<a href="evento.html/#/'+ datdbok[i]['id']+'"><h5 class="card-title">' + title + '</h5></a>';
+				card += '			<p class="card-text">' + description + '</p>';
+				//card += '			<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>';
+				card += '		</div>';
+				card += '	</div>';
+				card += '</div>';
+				
+				cards += card;
+			}
+			if(page+1>datdbok.length/9){
+				for(i=0;i<9-(l%9);i++){
+					var card = "";
+					card += '<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="visibility:hidden; margin-bottom:10px">';
+					card += '	<div class="card center-block" style="width: 18rem;">';
+					//card += iframe;
+					card += '		<div class="card-body">';
+					card += '			<h5 class="card-title">' + title + '</h5>';
+					card += '			<p class="card-text">' + description + '</p>';
+					//card += '			<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>';
+					card += '		</div>';
+					card += '	</div>';
+					card += '</div>';
+					
+					cards += card;
+				}
+			}
+			document.getElementById("cards").innerHTML = cards;
+		}
+
+		function start(){
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var response = JSON.parse(this.responseText);
+                            datdb=response;
+                            datdbok=response;
+                            DBresult();
+                        }
+                    };
+
+
+		var data = search();
+        console.log("stai inviando: "+data);
+        xhttp.open("POST", "http://99.80.72.24/read.php?", true);
+        xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhttp.send(data);
+
+        
+                    
+	}
+
+
+
+	function DBresult(){
+		
+		var i;
+		
+
+		var l = datdb.length;
+
+		var eventi = new Array();
+		var ora = new Array();
+		var giorno = new Array();
+
+		var prova=".";
+		
+		var msgOre;
+		var msgGiorni;
+		var msgEventi;
+
+		console.log("questo ok"+datdbok);
+
+		for (i=0; i<l; i++){
+			if(datdb[i]['title']!=prova){
+				prova=datdb[i]['title'];
+				datdbok[j]=datdb[i];
+				j++;
+			}
+
+		}
+		console.log("questo ok"+datdb);
+
+		fillCards();
+
+		msgEventi = eventi[1] + ", ";
+
+		for(i=1;i<5 && i<l;i++){
+			msgEventi = msgEventi + eventi[i] +", "; 
+		}
+		msgEventi= " il gli eventi consigliati sono:" + msgEventi;
+		console.log(msgEventi);
+		console.log(ora);
+		tts(msgEventi);
+
+	}
+
+	function tts(msg){
+		responsiveVoice.speak(msg, 'Italian Female');
+		console.log(msg);
+	}
+
+		function search(){
+			var name = document.getElementById("name").value;
+			var place = document.getElementById("place").value;
+			var tags = document.getElementById("tags").value;
+			var date = document.getElementById("date").value;
+			var time = document.getElementById("time").value;
+			
+
+			var frst=1;
+			var str = "";
+			
+			if(name != ""){
+				str += "title=" + name;
+			}
+			if(place != ""){
+				if(str.length>0){
+					str += "&";
+				}
+				str += "place=" + place;
+			}
+			if(tags != ""){
+				if(str.length>0){
+					str += "&";
+				}
+				str += "tags=" + tags;
+			}
+			if(date != ""){
+				if(str.length>0){
+					str += "&";
+				}
+				str += "date=" + date;
+			}
+			if(time != ""){
+				if(str.length>0){
+					str += "&";
+				}
+				str += "start_time=" + time;
+			}
+			console.log(str);
+			return str;
+		}
+	</script>
+
+
+  <head >
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,7 +237,7 @@
 	}
 	</style>
   </head>
-  <body>
+  <body onload="iniz();">
 	<div class="container" style="margin-top:80px">
 		<div class="row">
 			<div class="col-md-1 col-sm-2">
@@ -38,7 +252,7 @@
 				<p class="font-weight-bold w-100 text-white">DOVE</p>
 			</div>
 			<div class="col-sm">
-				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
+				<textarea id="place" rows="1" class="form-control ds-input"></textarea>
 			</div>
 		</div>
 		<div class="row">
@@ -46,7 +260,7 @@
 				<p class="font-weight-bold w-100 text-white">TAGS</p>
 			</div>
 			<div class="col-sm">
-				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
+				<textarea id="tags" rows="1" class="form-control ds-input"></textarea>
 			</div>
 		</div>
 		<div class="row">
@@ -54,7 +268,7 @@
 				<p class="font-weight-bold w-100 text-white">DATA</p>
 			</div>
 			<div class="col-sm">
-				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
+				<textarea id="date" rows="1" class="form-control ds-input"></textarea>
 			</div>
 		</div>
 		<div class="row">
@@ -62,129 +276,42 @@
 				<p class="font-weight-bold w-100 text-white">ORA</p>
 			</div>
 			<div class="col-sm">
-				<textarea id="name" rows="1" class="form-control ds-input"></textarea>
+				<textarea id="time" rows="1" class="form-control ds-input"></textarea>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm">
-				<button onclick="search()" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">CERCA</button>
+				<button onclick="start();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">CERCA</button>
 			</div>
 		</div>
 	</div>
 	
 	<div class="container" style="margin-top:80px">
-		<div class="row text-center">
-			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
-				<div class="card center-block" style="width: 18rem;">
-					<img src="https://media.giphy.com/media/9kDR0U4gaguic/giphy.gif" class="card-img-top" alt="...">
-					<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
-					</div>
-				</div>
-			</div>
-
-			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
-				<div class="card center-block" style="width: 18rem;">
-					<img src="https://media.giphy.com/media/I2sZ6qckkhfLG/giphy.gif" class="card-img-top" alt="...">
-					<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
-					</div>
-				</div>
-			</div>
+		<div id="cards" class="row text-center">
 			
-			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
-				<div class="card center-block" style="width: 18rem;">
-					<img src="https://media.giphy.com/media/mErRqp3dOxMeA/giphy.gif" class="card-img-top" alt="...">
-					<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
-					</div>
-				</div>
-			</div>
-			
-			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
-				<div class="card center-block" style="width: 18rem;">
-					<img src="https://media.giphy.com/media/ItLceamnRtfUI/giphy.gif" class="card-img-top" alt="...">
-					<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
-					</div>
-				</div>
-			</div>
-			
-			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
-				<div class="card center-block" style="width: 18rem;">
-					<img src="https://media.giphy.com/media/Dbf7V57cxcwBq/giphy.gif" class="card-img-top" alt="...">
-					<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
-					</div>
-				</div>
-			</div>
-			
-			<div class=".col-xl-3 col-lg-4 col-md-6 col-sm-12 text-center" style="margin-bottom:10px">
-				<div class="card center-block" style="width: 18rem;">
-					<img src="https://media.giphy.com/media/nvTB2zcQ0oMkE/giphy.gif" class="card-img-top" alt="...">
-					<div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href="#" class="btn btn-outline-light" style="background-color:#8a0303">Go somewhere</a>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
+
+
+
+	<div class="container">
+	  <div class="row" >
+	    <div  class="col-sm-6"> <button id="prvb" onclick="prevPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina precedente</button></div>
+	    <div  class="col-sm-6"> <button id="nxtb" onclick="nextPage();" class="font-weight-bold btn btn-outline-light btn-block" style="margin-top:20px">pagina successiva</button></div>
+	  </div>
+	</div>
+
+
+
 	
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
-	<script>
-		function search(){
-			var name = document.getElementById("name").innerHTML;
-			var place = document.getElementById("place").innerHTML;
-			var tags = document.getElementById("tags").innerHTML;
-			var data = document.getElementById("data").innerHTML;
-			var time = document.getElementById("time").innerHTML;
-			
-			var str = "?";
-			
-			if(name != ""){
-				str += "name=" + name;
-			}
-			if(place != ""){
-				if(str.substring(str.length()-1) != '?'){
-					str += "&";
-				}
-				str += "place=" + place;
-			}
-			if(tags != ""){
-				if(str.substring(str.length()-1) != '?'){
-					str += "&";
-				}
-				str += "tags=" + tags;
-			}
-			if(data != ""){
-				if(str.substring(str.length()-1) != '?'){
-					str += "&";
-				}
-				str += "data=" + data;
-			}
-			if(time != ""){
-				if(str.substring(str.length()-1) != '?'){
-					str += "&";
-				}
-				str += "time=" + time;
-			}
-		}
-	</script>
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=lFzRHQ6O"></script>
+
+	
   </body>
 </html>
